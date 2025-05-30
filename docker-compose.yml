@@ -1,0 +1,19 @@
+services:
+  tisow_fe:
+    container_name: tisow_fe
+    build: .
+    image: tisow_fe_v1
+    ports:
+      - "80:80"
+    expose:
+      - 80
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf  # Mount your custom Nginx config
+    networks:
+      - internalnet
+    restart: always
+
+networks:
+  internalnet:
+    name: internalnet
+    external: true
