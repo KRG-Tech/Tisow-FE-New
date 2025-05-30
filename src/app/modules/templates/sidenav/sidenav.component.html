@@ -1,0 +1,437 @@
+<ng-container>
+  <p-menu
+    *ngIf="navBarVisibility.getNavBar"
+    [model]="navData"
+    styleClass="w-full md:w-14rem h-full border-noround border-none"
+  >
+  <ng-template pTemplate="start">
+    <div class="cursor-pointer h-4rem w-full flex align-items-center gap-3 p-2">
+      <img src="../../../../assets/Tisow-white.png" alt="Logo" class="h-3rem" />
+      <!-- <span class="font-medium text-5xl font-semibold m-0">
+        T<span class="text-bluegray-500">-</span
+        ><span class="text-primary">Edge</span>
+      </span> -->
+    </div>
+  </ng-template>
+  
+    <ng-template pTemplate="submenuheader" let-item>
+      <span class="text-primary font-bold">{{ item.label }}</span>
+    </ng-template>
+    <ng-template pTemplate="item" let-item>
+      <a
+        class="flex align-items-center p-menuitem-link"
+        [routerLink]="item.routerLink"
+        pRipple
+      >
+        <span [class]="item.icon"></span>
+        <span class="ml-2">{{ item.label }}</span>
+        <p-badge *ngIf="item.badge" class="ml-auto" [value]="item.badge" />
+        <span
+          *ngIf="item.shortcut"
+          class="ml-auto border-1 surface-border border-round surface-100 text-xs p-1"
+        >
+          {{ item.shortcut }}
+        </span>
+      </a>
+    </ng-template>
+
+    <!-- <ng-template pTemplate="end">
+      <div
+        pRipple
+        class="relative overflow-hidden w-full p-link flex align-items-center p-2 pl-3 text-color hover:surface-200 border-noround"
+        (click)="showAddUserDialog()"
+      >
+        <p-avatar
+          label="{{ userData?.first_name.charAt(0) }}"
+          class="mr-2"
+          shape="circle"
+        />
+        <span class="inline-flex flex-column">
+          <span class="font-bold">{{ userData?.first_name }}</span>
+          <span class="text-sm">{{ userData?.email }}</span>
+          <span class="text-xs font-light">{{ userData?.role }}</span>
+        </span>
+      </div>
+    </ng-template> -->
+  </p-menu>
+
+  <p-dialog
+    header="Header"
+    [(visible)]="addUserView"
+    [modal]="true"
+    [style]="{
+      width: '30rem'
+    }"
+  >
+    <!-- <ng-template pTemplate="header">
+      <div class="inline-flex align-items-center justify-content-center gap-2">
+        <i class="pi pi-user-edit mr-2" style="font-size: 2rem"></i>
+        <span class="font-bold white-space-nowrap"> Edit User </span>
+      </div>
+    </ng-template> -->
+    <form [formGroup]="userForm">
+      <div class="flex align-items-center gap-3 mb-3">
+        <label for="first_name" class="font-semibold w-10rem">
+          First Name
+        </label>
+        <input
+          pInputText
+          id="first_name"
+          class="flex-auto"
+          autocomplete="off"
+          formControlName="first_name"
+        />
+      </div>
+      <div class="flex align-items-center gap-3 mb-3">
+        <label for="second_name" class="font-semibold w-10rem">
+          Second Name
+        </label>
+        <input
+          pInputText
+          id="second_name"
+          class="flex-auto"
+          autocomplete="off"
+          formControlName="second_name"
+        />
+      </div>
+      <div class="flex align-items-center gap-3 mb-5">
+        <label for="email" class="font-semibold w-10rem">Email</label>
+        <input
+          pInputText
+          id="email"
+          class="flex-auto"
+          autocomplete="off"
+          formControlName="email"
+        />
+      </div>
+      <div class="flex align-items-center gap-3 mb-5">
+        <label for="role" class="font-semibold w-10rem">Role</label>
+        <p-treeSelect
+          id="role"
+          [options]="userRoles"
+          containerStyleClass="w-full"
+          placeholder="Select Role"
+          formControlName="role"
+        />
+      </div>
+      <div class="flex align-items-center gap-3 mb-5">
+        <label for="password" class="font-semibold w-10rem"
+          >Current Password<span style="color: red; margin-left: 5px"
+            >*</span
+          ></label
+        >
+        <!-- <input
+        pInputText
+        id="password"
+        class="flex-auto"
+        autocomplete="off"
+        formControlName="password"
+      /> -->
+        <p-password
+          id="password"
+          class="w-10"
+          [feedback]="true"
+          formControlName="password"
+          [toggleMask]="true"
+        />
+      </div>
+      <div class="flex align-items-center gap-3 mb-5">
+        <label for="password" class="font-semibold w-10rem"
+          >New Password<span style="color: red; margin-left: 5px"
+            >*</span
+          ></label
+        >
+
+        <p-password
+          id="new_password"
+          class="w-10"
+          [feedback]="true"
+          formControlName="new_password"
+          [toggleMask]="true"
+        />
+      </div>
+      <div class="flex align-items-center gap-3 mb-5">
+        <label for="re_password" class="font-semibold w-10rem"
+          >Confirm Password<span style="color: red; margin-left: 5px"
+            >*</span
+          ></label
+        >
+        <p-password
+          id="re_password"
+          class="w-10"
+          [feedback]="true"
+          formControlName="re_password"
+          [toggleMask]="true"
+        />
+      </div>
+    </form>
+    <!-- <ng-template pTemplate="footer">
+      <p-button
+        label="Cancel"
+        [text]="true"
+        severity="secondary"
+        (onClick)="cancelEditUser()"
+      />
+      <p-button
+        label="Edit"
+        [outlined]="true"
+        severity="primary"
+        (onClick)="editUser()"
+      />
+    </ng-template> -->
+  </p-dialog>
+
+  <!-- <p-dialog
+    header="Header"
+    [(visible)]="settingsView"
+    [modal]="true"
+    [style]="{
+      width: '25rem'
+    }"
+  >
+    <ng-template pTemplate="header">
+      <div class="inline-flex align-items-center justify-content-center gap-2">
+        <i class="pi pi-spin mr-2" style="font-size: 2rem"></i>
+        <span class="font-bold white-space-nowrap"> Settings </span>
+      </div>
+    </ng-template>
+    <div>
+      <form [formGroup]="themeModeForm">
+        <div class="flex align-items-center gap-8 mb-3 p-3">
+          <label for="dark_mode" class="font-lg w-6rem flex"> Dark Mode </label>
+          <p-inputSwitch
+            id="dark_mode"
+            class="flex-auto"
+            formControlName="mode"
+          />
+        </div>
+      </form>
+    </div>
+    <div>
+      <span class="font-lg white-space-nowrap p-3"> Themes </span>
+      <div
+        class="p-3 gap-2 flex flex-column justify-content-center align-items-center"
+      >
+        <div class="flex gap-5 justify-content-center align-items-center">
+          <div
+            class="flex flex-column justify-content-center align-items-center gap-1 cursor-pointer"
+          >
+            <div
+              (click)="navBarVisibility.switchTheme('amber')"
+              pRipple
+              class="border-circle h-3rem w-3rem flex justify-content-center align-items-center"
+              style="
+                background: linear-gradient(
+                  180deg,
+                  #f59e0b 0%,
+                  rgba(245, 158, 11, 0.5) 100%
+                );
+              "
+            >
+              <i
+                *ngIf="navBarVisibility.getCurrTheme === 'amber'"
+                class="pi pi-check"
+                style="font-size: 1rem; color: var(--surface-ground)"
+              ></i>
+            </div>
+            <span class="text-xs"> Amber </span>
+          </div>
+          <div
+            class="flex flex-column justify-content-center align-items-center gap-1 cursor-pointer"
+          >
+            <div
+              (click)="navBarVisibility.switchTheme('blue')"
+              pRipple
+              class="border-circle h-3rem w-3rem flex justify-content-center align-items-center"
+              style="
+                background: linear-gradient(
+                  180deg,
+                  #4378e6 0%,
+                  rgba(67, 120, 230, 0.5) 100%
+                );
+              "
+            >
+              <i
+                *ngIf="navBarVisibility.getCurrTheme === 'blue'"
+                class="pi pi-check"
+                style="font-size: 1rem; color: var(--surface-ground)"
+              ></i>
+            </div>
+            <span class="text-xs"> Blue </span>
+          </div>
+          <div
+            class="flex flex-column justify-content-center align-items-center gap-1 cursor-pointer"
+          >
+            <div
+              (click)="navBarVisibility.switchTheme('cyan')"
+              pRipple
+              class="border-circle h-3rem w-3rem flex justify-content-center align-items-center"
+              style="
+                background: linear-gradient(
+                  180deg,
+                  #06b6d4 0%,
+                  rgba(6, 182, 212, 0.5) 100%
+                );
+              "
+            >
+              <i
+                *ngIf="navBarVisibility.getCurrTheme === 'cyan'"
+                class="pi pi-check"
+                style="font-size: 1rem; color: var(--surface-ground)"
+              ></i>
+            </div>
+            <span class="text-xs"> Cyan </span>
+          </div>
+        </div>
+        <div class="flex gap-5 justify-content-center align-items-center">
+          <div
+            class="flex flex-column justify-content-center align-items-center gap-1 cursor-pointer"
+          >
+            <div
+              (click)="navBarVisibility.switchTheme('green')"
+              pRipple
+              class="border-circle h-3rem w-3rem flex justify-content-center align-items-center"
+              style="
+                background: linear-gradient(
+                  180deg,
+                  #14b8a6 0%,
+                  rgba(20, 184, 166, 0.5) 100%
+                );
+              "
+            >
+              <i
+                *ngIf="navBarVisibility.getCurrTheme === 'green'"
+                class="pi pi-check"
+                style="font-size: 1rem; color: var(--surface-ground)"
+              ></i>
+            </div>
+            <span class="text-xs"> Green </span>
+          </div>
+          <div
+            class="flex flex-column justify-content-center align-items-center gap-1 cursor-pointer"
+          >
+            <div
+              (click)="navBarVisibility.switchTheme('lime')"
+              pRipple
+              class="border-circle h-3rem w-3rem flex justify-content-center align-items-center"
+              style="
+                background: linear-gradient(
+                  180deg,
+                  #84cc16 0%,
+                  rgb(132, 204, 22, 0.5) 100%
+                );
+              "
+            >
+              <i
+                *ngIf="navBarVisibility.getCurrTheme === 'lime'"
+                class="pi pi-check"
+                style="font-size: 1rem; color: var(--surface-ground)"
+              ></i>
+            </div>
+            <span class="text-xs"> Lime </span>
+          </div>
+          <div
+            class="flex flex-column justify-content-center align-items-center gap-1 cursor-pointer"
+          >
+            <div
+              (click)="navBarVisibility.switchTheme('noir')"
+              pRipple
+              class="border-circle h-3rem w-3rem flex justify-content-center align-items-center"
+              style="
+                background: linear-gradient(
+                  180deg,
+                  #0f172a 0%,
+                  rgba(0, 0, 0, 0.5) 100%
+                );
+              "
+            >
+              <i
+                *ngIf="navBarVisibility.getCurrTheme === 'noir'"
+                class="pi pi-check"
+                style="font-size: 1rem; color: var(--gray-200)"
+              ></i>
+            </div>
+            <span class="text-xs"> Noir </span>
+          </div>
+        </div>
+        <div class="flex gap-5 justify-content-center align-items-center">
+          <div
+            class="flex flex-column justify-content-center align-items-center gap-1 cursor-pointer"
+          >
+            <div
+              (click)="navBarVisibility.switchTheme('pink')"
+              pRipple
+              class="border-circle h-3rem w-3rem flex justify-content-center align-items-center"
+              style="
+                background: linear-gradient(
+                  180deg,
+                  #ec4899 0%,
+                  rgba(236, 72, 153, 0.5) 100%
+                );
+              "
+            >
+              <i
+                *ngIf="navBarVisibility.getCurrTheme === 'pink'"
+                class="pi pi-check"
+                style="font-size: 1rem; color: var(--surface-ground)"
+              ></i>
+            </div>
+            <span class="text-xs"> pink </span>
+          </div>
+          <div
+            class="flex flex-column justify-content-center align-items-center gap-1 cursor-pointer"
+          >
+            <div
+              (click)="navBarVisibility.switchTheme('purple')"
+              pRipple
+              class="border-circle h-3rem w-3rem flex justify-content-center align-items-center"
+              style="
+                background: linear-gradient(
+                  180deg,
+                  #7758e4 0%,
+                  rgba(119, 88, 228, 0.5) 100%
+                );
+              "
+            >
+              <i
+                *ngIf="navBarVisibility.getCurrTheme === 'purple'"
+                class="pi pi-check"
+                style="font-size: 1rem; color: var(--surface-ground)"
+              ></i>
+            </div>
+            <span class="text-xs"> purple </span>
+          </div>
+          <div
+            class="flex flex-column justify-content-center align-items-center gap-1 cursor-pointer"
+          >
+            <div
+              (click)="navBarVisibility.switchTheme('teal')"
+              pRipple
+              class="border-circle h-3rem w-3rem flex justify-content-center align-items-center"
+              style="
+                background: linear-gradient(
+                  180deg,
+                  #4dac9c 0%,
+                  rgba(77, 172, 156, 0.5) 100%
+                );
+              "
+            >
+              <i
+                *ngIf="navBarVisibility.getCurrTheme === 'teal'"
+                class="pi pi-check"
+                style="font-size: 1rem; color: var(--surface-ground)"
+              ></i>
+            </div>
+            <span class="text-xs"> teal </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </p-dialog> -->
+</ng-container>
+
+<ng-template #loader>
+  <div class="w-full m-0 p-0 flex justify-content-center mt-3">
+    <p-progressSpinner ariaLabel="loading" />
+  </div>
+</ng-template>

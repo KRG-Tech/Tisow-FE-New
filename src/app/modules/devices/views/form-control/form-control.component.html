@@ -1,0 +1,74 @@
+<p-toast position="top-right"></p-toast>
+<div
+  class="card flex justify-content-center ml-auto"
+  *ngIf="formType == 'host' && !editProp['edit']"
+  aria-hidden="false"
+>
+  <p-tieredMenu #menu [model]="protocolTypes" [popup]="true" />
+  <p-button (onClick)="menu.toggle($event)" icon="pi pi-plus" label="Host" />
+</div>
+<ng-container *ngIf="selectedProtocol === 'bacnet'">
+  <ng-container *ngIf="formType === 'host'">
+    <app-add-bacnet
+      (refreshPage)="refreshPage()"
+      [visibility]="visibility"
+      (closeFormDialogue)="closeDialogue()"
+      [editProp]="editProp"
+      (saveEditedHost)="editHostDevice($event)"
+    ></app-add-bacnet>
+  </ng-container>
+  <ng-container *ngIf="formType === 'device'">
+    <app-add-bacnet-device
+      (refreshPage)="refreshPage()"
+      [visibility]="visibility"
+      (closeFormDialogue)="closeDialogue()"
+      [host_id]="host_id"
+      [editProp]="editProp"
+      (saveEditedHost)="editHostDevice($event)"
+    ></app-add-bacnet-device>
+  </ng-container>
+</ng-container>
+
+<ng-container *ngIf="selectedProtocol === 'mbus'">
+  <ng-container *ngIf="formType === 'host'">
+    <app-add-mbus-host
+      (refreshPage)="refreshPage()"
+      [visibility]="visibility"
+      (closeFormDialogue)="closeDialogue()"
+      [editProp]="editProp"
+      (saveEditedHost)="editHostDevice($event)"
+    ></app-add-mbus-host>
+  </ng-container>
+  <ng-container *ngIf="formType === 'device'">
+    <app-add-mbus-device
+      (refreshPage)="refreshPage()"
+      [visibility]="visibility"
+      (closeFormDialogue)="closeDialogue()"
+      [host_id]="host_id"
+      [editProp]="editProp"
+      (saveEditedHost)="editHostDevice($event)"
+    ></app-add-mbus-device>
+  </ng-container>
+</ng-container>
+
+<ng-container *ngIf="selectedProtocol === 'modbus'">
+  <ng-container *ngIf="formType === 'host'">
+    <app-add-modbus-host
+      (refreshPage)="refreshPage()"
+      [visibility]="visibility"
+      (closeFormDialogue)="closeDialogue()"
+      [editProp]="editProp"
+      (saveEditedHost)="editHostDevice($event)"
+    ></app-add-modbus-host>
+  </ng-container>
+  <ng-container *ngIf="formType === 'device'">
+    <app-add-modbus-device
+      (refreshPage)="refreshPage()"
+      [visibility]="visibility"
+      (closeFormDialogue)="closeDialogue()"
+      [host_id]="host_id"
+      [editProp]="editProp"
+      (saveEditedHost)="editHostDevice($event)"
+    ></app-add-modbus-device>
+  </ng-container>
+</ng-container>

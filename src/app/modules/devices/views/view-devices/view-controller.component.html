@@ -1,0 +1,56 @@
+<!-- <p-toast position="top-right"></p-toast> -->
+
+<div class="w-full m-0 p-0">
+  <div class="w-full border-round flex align-items-center p-2">
+    <div class="flex align-items-center">
+      <p-button
+        icon="pi pi-align-justify"
+        class="mr-2"
+        [raised]="true"
+        [outlined]="true"
+        (onClick)="themeServ.setNavBar()"
+      />
+      <i class="pi pi-microchip mr-2"></i>
+      <p class="m-0 text-lg font-semibold" style="color: var(--surface-500)">
+        Devices-
+        <span class="text-sm text-primary">{{ hostName }}</span>
+      </p>
+    </div>
+    <app-form-control
+      *ngIf="auth.accessWrite"
+      class="ml-auto"
+      (refresh)="reloadPage()"
+      [host_id]="host_id"
+      formType="device"
+      [selectedProtocol]="protocol"
+    ></app-form-control>
+  </div>
+  <ng-container *ngIf="deviceView; else loader">
+    <div
+      class="border-round p-2 mt-1 grid w-full"
+      style="
+        overflow-y: auto;
+        overflow-x: hidden;
+        margin-left: 1px;
+        height: 32rem;
+        background-color: var(--surface-100);
+      "
+    >
+      <ng-container *ngFor="let device of deviceLists">
+        <div class="col-12 md:col-2">
+          <app-device-setup
+            [data]="device"
+            [device_type]="'device'"
+            (refreshPage)="reloadPage()"
+          ></app-device-setup>
+        </div>
+      </ng-container>
+    </div>
+  </ng-container>
+</div>
+
+<ng-template #loader>
+  <div class="w-full m-0 p-0 flex justify-content-center mt-3">
+    <p-progressSpinner ariaLabel="loading" />
+  </div>
+</ng-template>

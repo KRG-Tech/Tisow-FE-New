@@ -1,0 +1,73 @@
+<!-- <p-toast position="top-right"></p-toast> -->
+
+<div class="w-full m-0 p-0">
+  <div class="w-full border-round flex align-items-center p-2">
+    <div class="flex align-items-center">
+      <p-button
+        icon="pi pi-align-justify"
+        class="mr-2"
+        [raised]="true"
+        [outlined]="true"
+        (onClick)="themeServ.setNavBar()"
+      />
+      <i class="pi pi-server mr-2"></i>
+      <p class="m-0 text-lg font-semibold" style="color: var(--surface-500)">
+        Host Devices
+      </p>
+    </div>
+    <div class="ml-auto flex align-items-center gap-2">
+  <app-form-control
+    *ngIf="auth.accessWrite"
+    formType="host"
+    (refresh)="refreshHosts()"
+  ></app-form-control>
+
+  <!-- Hidden file input -->
+  <input
+    type="file"
+    #fileInput
+    accept=".xlsx,.xls"
+    style="display: none"
+    (change)="onFileAutoUpload($event)"
+  />
+
+  <!-- Upload button triggers file input click -->
+  <button class="p-button p-button-md " (click)="fileInput.click()">
+  <i class="pi pi-upload mr-2"></i>
+  Upload
+</button>
+
+</div>
+
+  </div>
+  <ng-container *ngIf="hostView; else loader">
+    <div
+      class="border-round p-2 mt-1 grid w-full"
+      style="
+        overflow-y: auto;
+        overflow-x: hidden;
+        margin-left: 1px;
+        height: 32rem;
+        background-color: var(--surface-100);
+      "
+    >
+
+
+      <ng-container *ngFor="let host of hostLists">
+        <div class="col-12 md:col-2">
+          <app-device-setup
+            [data]="host"
+            [device_type]="'host'"
+            (refreshPage)="refreshHosts()"
+          ></app-device-setup>
+        </div>
+      </ng-container>
+    </div>
+  </ng-container>
+</div>
+
+<ng-template #loader>
+  <div class="w-full m-0 p-0 flex justify-content-center mt-3">
+    <p-progressSpinner ariaLabel="loading" />
+  </div>
+</ng-template>

@@ -1,0 +1,157 @@
+<p-button
+  icon="pi pi-plus"
+  iconPos="left"
+  label="Widget"
+  (onClick)="widgetDialogue()"
+/>
+
+<p-dialog
+  header="Header"
+  [(visible)]="visibility"
+  [modal]="true"
+  [closable]="false"
+  [style]="{ width: '55rem', height: '30rem' }"
+>
+  <ng-template pTemplate="header">
+    <div class="inline-flex align-items-center justify-content-center gap-2">
+      <i class="pi pi-chart-bar mr-2" style="font-size: 2rem"></i>
+      <span class="font-bold white-space-nowrap"> Add Widget </span>
+    </div>
+  </ng-template>
+  <form [formGroup]="widgetForm">
+    <div class="p-1">
+      <ng-container *ngIf="formLoaded; else loader">
+        <div class="flex align-items-center justify-content-left gap-8">
+          <div class="flex align-items-center gap-3 mb-3">
+            <label for="widget_name" class="font-semibold w-6rem flex">
+              Name <span style="color: red" class="ml-1">*</span>
+            </label>
+            <input
+              pInputText
+              id="widget_name"
+              placeholder="Enter Widget Name"
+              class="flex-auto"
+              autocomplete="off"
+              formControlName="widget_name"
+            />
+          </div>
+          <div class="flex align-items-center gap-3 mb-5">
+            <label for="widget_type" class="font-semibold w-6rem"
+              >Widget Type<span style="color: red; margin-left: 5px"
+                >*</span
+              ></label
+            >
+            <p-treeSelect
+              id="widget_type"
+              [options]="widgetType"
+              containerStyleClass="w-full"
+              placeholder="Select Type"
+              formControlName="widget_type"
+            />
+          </div>
+        </div>
+        <div class="flex align-items-center justify-content-left gap-8">
+          <div class="flex align-items-center mb-5">
+            <label for="devices" class="font-semibold w-6rem"
+              >Device<span style="color: red; margin-left: 5px">*</span></label
+            >
+            <p-treeSelect
+              id="devices"
+              [options]="devices"
+              containerStyleClass="w-full"
+              placeholder="Select Device"
+              formControlName="device_id"
+              scrollHeight="200px"
+            />
+          </div>
+
+          <div class="flex align-items-center gap-3 mb-5">
+            <label for="selected_device" class="font-semibold w-10rem flex">
+              Device Type <span style="color: red" class="ml-1">*</span>
+            </label>
+            <input
+              pInputText
+              id="selected_device"
+              placeholder="Select Device"
+              class="flex-auto"
+              autocomplete="off"
+              formControlName="selected_device"
+            />
+          </div>
+        </div>
+
+        <div class="flex align-items-center justify-content-left gap-8">
+          <div class="flex align-items-center gap-1 mb-5">
+            <label for="tags" class="font-semibold w-6rem"
+              >Tags<span style="color: red; margin-left: 5px">*</span></label
+            >
+            <p-multiSelect
+              [maxSelectedLabels]="1"
+              selectedItemsLabel="{} tags selected"
+              [options]="deviceTags"
+              formControlName="tags"
+              optionLabel="label"
+              optionValue="data"
+              dataKey="key"
+              tooltipPosition="top"
+              placeholder="Select Tags"
+              scrollHeight="160px"
+            />
+          </div>
+        </div>
+
+        <div class="flex align-items-center justify-content-left gap-8">
+          <div class="flex align-items-center gap-1 mb-5">
+            <label for="from_time" class="font-semibold w-6rem"
+              >From<span style="color: red; margin-left: 5px">*</span>
+            </label>
+            <p-calendar
+              id="from_time"
+              [touchUI]="true"
+              [readonlyInput]="true"
+              dateFormat="dd/mm/yy"
+              [showTime]="true"
+              [hourFormat]="'24'"
+              formControlName="from_time"
+            />
+          </div>
+          <div class="flex align-items-center gap-1 mb-5">
+            <label for="to_time" class="font-semibold w-6rem"
+              >To<span style="color: red; margin-left: 5px">*</span>
+            </label>
+            <p-calendar
+              id="to_time"
+              [touchUI]="true"
+              [readonlyInput]="true"
+              [showTime]="true"
+              [maxDate]="maxDate"
+              [minDate]="this.widgetForm.get('from_time')?.value"
+              dateFormat="dd/mm/yy"
+              [hourFormat]="'24'"
+              formControlName="to_time"
+            />
+          </div>
+        </div>
+      </ng-container>
+    </div>
+    <div class="flex align-items-center justify-content-between p-5">
+      <p-button
+        label="Cancel"
+        severity="danger"
+        (onClick)="cancelAddWidget()"
+      />
+      <p-button
+        label="Add"
+        severity="primary"
+        [disabled]="!widgetForm.valid"
+        (onClick)="onWidgetAdd()"
+      />
+    </div>
+  </form>
+</p-dialog>
+
+<ng-template #loader>
+  <div class="w-full m-0 p-0 flex justify-content-center mt-3">
+    <p-progressSpinner ariaLabel="loading" />
+  </div>
+</ng-template>

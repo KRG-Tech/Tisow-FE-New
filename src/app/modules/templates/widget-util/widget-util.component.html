@@ -1,0 +1,113 @@
+<div class="p-2 m-2 w-full">
+  <div
+    class="shadow-1 h-2rem m-0 flex align-items-center p-2 surface-500 border-round-top gap-2"
+  >
+    <p-badge
+      [value]="this.data['widget_type']"
+      [severity]="widgetStatus"
+      [pTooltip]="tooltipTimestamp"
+      tooltipPosition="bottom"
+    />
+    <ng-template #tooltipTimestamp>
+      <div class="flex align-items-center">
+        <span class="text-sm">{{ lastFetched }}</span>
+      </div>
+    </ng-template>
+    <p class="m-0 text-sm font-semibold text-100 flex align-items-center">
+      {{ widgetName }} -
+      <span class="inline-flex flex-column ml-1 gap-0">
+        <p style="font-size: 0.6rem" class="m-0">{{ data["device"]["mac"] }}</p>
+        <p style="font-size: 0.5rem" class="m-0 font-light">
+          Device: {{ data["device"]["device_name"] }}
+        </p>
+      </span>
+    </p>
+    <div class="ml-auto flex align-items-center">
+      <p-button
+        *ngIf="this.data['widget_type'] == 'history'"
+        [icon]="excelexported ? 'pi pi-file-excel' : 'pi pi-angle-double-down'"
+        class="ml-auto"
+        [style]="{ height: '10px' }"
+        text="true"
+        [disabled]="!excelexported"
+        severity="success"
+        (onClick)="onExportData()"
+      />
+
+      <p-button
+        icon="pi pi-arrow-up-right-and-arrow-down-left-from-center"
+        class="ml-auto"
+        size="small"
+        text="true"
+        severity="info"
+        (onClick)="onMaxWidget()"
+      />
+
+      <p-button
+        *ngIf="auth.accessWrite"
+        icon="pi pi-trash"
+        size="small"
+        [text]="true"
+        severity="danger"
+        (onClick)="onWidgetDelete()"
+      />
+    </div>
+  </div>
+
+  <ag-grid-angular
+    [rowData]="widgetRowData"
+    [columnDefs]="columnDefs"
+    [gridOptions]="gridOptions"
+    [suppressMenuHide]="true"
+    (gridReady)="onGridReady($event)"
+    class="ag-theme-alpine-dark shadow-1 m-0 border-round-bottom"
+    [ngClass]="tableHeight"
+  >
+  </ag-grid-angular>
+</div>
+
+<p-dialog
+  [(visible)]="maxWidget"
+  closeOnEscape="true"
+  [modal]="true"
+  [style]="{ width: '78rem' }"
+>
+  <div
+    class="shadow-1 h-2rem m-0 flex align-items-center p-2 surface-500 border-round-top gap-2"
+  >
+    <p-badge
+      [value]="this.data['widget_type']"
+      [severity]="widgetStatus"
+      [pTooltip]="tooltipTimestamp"
+      tooltipPosition="bottom"
+      [tooltipDisabled]="this.data['widget_type'] == 'history'"
+    />
+    <ng-template #tooltipTimestamp>
+      <div class="flex align-items-center">
+        <span class="text-sm">{{ lastFetched }}</span>
+      </div>
+    </ng-template>
+    <p class="m-0 text-sm font-semibold text-100 flex align-items-center">
+      {{ widgetName }} -
+      <span class="inline-flex flex-column ml-1 gap-0">
+        <p style="font-size: 0.6rem" class="m-0">
+          {{ data["device"]["mac"] }}
+        </p>
+        <p style="font-size: 0.5rem" class="m-0 font-light">
+          Device: {{ data["device"]["device_name"] }}
+        </p>
+      </span>
+    </p>
+  </div>
+
+  <ag-grid-angular
+    [rowData]="widgetRowData"
+    [columnDefs]="columnDefs"
+    [gridOptions]="gridOptions"
+    [suppressMenuHide]="true"
+    (gridReady)="onGridReady($event)"
+    class="ag-theme-alpine-dark shadow-1 m-0 border-round-bottom"
+    [ngClass]="tableHeight"
+  >
+  </ag-grid-angular>
+</p-dialog>

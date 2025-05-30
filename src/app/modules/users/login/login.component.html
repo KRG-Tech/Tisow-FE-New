@@ -1,0 +1,66 @@
+<div class="flex justify-content-center align-items-center h-full background">
+  <div class="h-full">
+    <span class="font-medium text-7xl font-bold absolute bottom-0 left-0 p-4">
+      T<span class="text-bluegray-400">Edge</span>
+    </span>
+  </div>
+  <div>
+    <form [formGroup]="loginForm" class="shadow-8">
+      <p-card [style]="{ width: '360px', background: 'transparent' }">
+        <ng-template pTemplate="header">
+          <div
+            class="flex justify-content-center align-items-center w-full h-full shadow-7 font-semibold"
+          >
+            <img
+              src="../../../../assets/Tisow Full Logo.png"
+              style="width: 8rem"
+            />
+          </div>
+        </ng-template>
+        <div class="field">
+          <label for="email" class="text-bluegray-50">Email</label>
+          <input
+            type="text"
+            pInputText
+            formControlName="email"
+            class="w-full"
+            name="Email"
+            placeholder="Enter Email"
+          />
+          <small
+            *ngIf="(email.invalid && email.dirty) || email.touched"
+            class="block p-error"
+          >
+            <div *ngIf="email.errors?.['required']">Email is required</div>
+            <div *ngIf="email.errors?.['email']">Enter valid email</div>
+          </small>
+        </div>
+        <div class="field">
+          <label for="password" class="text-bluegray-50">Password</label>
+          <input
+            type="password"
+            pInputText
+            formControlName="password"
+            class="w-full"
+            name="Password"
+            placeholder="Enter Password"
+          />
+          <small
+            *ngIf="(password.invalid && password.dirty) || password.touched"
+            class="block p-error"
+          >
+            <div *ngIf="password.errors?.['required']">
+              Password is required
+            </div>
+          </small>
+        </div>
+        <p-button
+          label="Log In"
+          styleClass="w-full"
+          (onClick)="login()"
+          [disabled]="loginForm.invalid"
+        ></p-button>
+      </p-card>
+    </form>
+  </div>
+</div>

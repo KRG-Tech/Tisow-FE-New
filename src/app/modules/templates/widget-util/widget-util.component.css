@@ -1,0 +1,60 @@
+.green-light {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    box-shadow:
+        0 0 20px var(--green-400),
+        -20px 0 80px var(--green-500),
+        20px 0 80px var(--green-800),
+        inset 0 0 50px var(--green-400),
+        inset 50px 0 80px var(--green-500),
+        inset -50px 0 80px var(--green-800),
+        inset 50px 0 300px var(--green-500),
+        inset -50px 0 300px var(--green-800);
+    animation: pulsate-green 6s linear infinite;
+}
+
+@keyframes pulsate-green {
+    50% {
+        box-shadow:
+            0 0 20px var(--green-400),
+            20px 0 80px var(--green-500),
+            -20px 0 80px var(--green-800),
+            inset 0 0 50px var(--green-400),
+            inset -50px 0 80px var(--green-500),
+            inset 50px 0 80px var(--green-800),
+            inset -50px 0 300px var(--green-500),
+            inset 50px 0 300px var(--green-800);
+    }
+}
+
+
+.red-light {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    box-shadow:
+        0 0 20px var(--red-400),
+        -20px 0 80px var(--red-500),
+        20px 0 80px var(--red-800),
+        inset 0 0 50px var(--red-400),
+        inset 50px 0 80px var(--red-500),
+        inset -50px 0 80px var(--red-800),
+        inset 50px 0 300px var(--red-500),
+        inset -50px 0 300px var(--red-800);
+    animation: pulsate-red 6s linear infinite;
+}
+
+@keyframes pulsate-red {
+    50% {
+        box-shadow:
+            0 0 20px var(--red-400),
+            20px 0 80px var(--red-500),
+            -20px 0 80px var(--red-800),
+            inset 0 0 50px var(--red-400),
+            inset -50px 0 80px var(--red-500),
+            inset 50px 0 80px var(--red-800),
+            inset -50px 0 300px var(--red-500),
+            inset 50px 0 300px var(--red-800);
+    }
+}

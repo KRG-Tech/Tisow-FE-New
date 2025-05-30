@@ -1,0 +1,78 @@
+<div class="w-full m-0 p-0">
+  <div class="w-full border-round flex align-items-center p-2">
+    <div class="flex align-items-center">
+      <p-button
+        icon="pi pi-align-justify"
+        class="mr-2"
+        [raised]="true"
+        [outlined]="true"
+        (onClick)="themeServ.setNavBar()"
+      />
+      <i class="pi pi-server mr-2"></i>
+      <p class="m-0 text-lg font-semibold" style="color: var(--surface-500)">
+        DashBoard -
+        <span class="text-sm text-primary">{{
+          selectedDashboard["name"]
+        }}</span>
+      </p>
+    </div>
+    <div class="ml-auto flex align-items-center justify-content-left gap-2">
+      <form [formGroup]="dashboardForm">
+        <p-treeSelect
+          class="md:w-10rem w-full"
+          containerStyleClass="w-full"
+          [options]="dashboards"
+          containerStyleClass="w-full"
+          placeholder="Select Dashboard"
+          formControlName="dashboardName"
+          scrollHeight="200px"
+        />
+      </form>
+      <app-add-dashboard
+        (refreshDashboard)="fetchDashboards()"
+      ></app-add-dashboard>
+      <app-widget
+        [dashboard_id]="selectedDashboard['id']"
+        *ngIf="selectedDashboard['id'] != 0"
+        (refreshDashboard)="refreshDashboard()"
+      ></app-widget>
+    </div>
+  </div>
+  <ng-container *ngIf="DashboardView; else loader">
+    <div
+      class="border-round p-2 grid mt-1 w-full overflow-y-auto overflow-x-hidden"
+      style="
+        margin-left: 1px;
+        height: 32rem;
+        background-color: var(--surface-100);
+      "
+    >
+      <ng-container *ngIf="selectedDashboard['id'] != 0; else noDashboard">
+        <ng-container *ngFor="let widgetData of data">
+          <div class="w-6 col-12">
+            <app-widget-util
+              [data]="widgetData"
+              (refreshDashboard)="refreshDashboard()"
+            ></app-widget-util>
+          </div>
+        </ng-container>
+      </ng-container>
+      <ng-template #noDashboard>
+        <div
+          class="flex justify-content-center w-full h-full align-items-center"
+        >
+          <p class="font-medium text-2xl font-semibold m-0 p-2 text-500">
+            <span class="text-primary">Select</span> or
+            <span class="text-primary">Create</span> dashboard
+          </p>
+        </div>
+      </ng-template>
+    </div>
+  </ng-container>
+</div>
+
+<ng-template #loader>
+  <div class="w-full m-0 p-0 flex justify-content-center mt-3">
+    <p-progressSpinner ariaLabel="loading" />
+  </div>
+</ng-template>

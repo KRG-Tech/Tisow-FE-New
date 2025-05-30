@@ -1,0 +1,314 @@
+<p-dialog
+  header="Header"
+  [(visible)]="visibility"
+  closable="false"
+  [modal]="true"
+  [style]="{ width: '55rem', height: '25rem' }"
+>
+  <ng-template pTemplate="header">
+    <div class="inline-flex align-items-center justify-content-center gap-2">
+      <i class="pi pi-wifi mr-2" style="font-size: 2rem"></i>
+      <span class="font-bold white-space-nowrap">
+        {{ editProp.edit ? "Edit" : "Add" }} Modbus RTU
+      </span>
+    </div>
+  </ng-template>
+
+  <ng-container *ngIf="formModule == 'host'">
+    <form [formGroup]="HostForm">
+      <div class="flex flex-column h-12rem">
+        <div class="flex mt-3 justify-content-center gap-4">
+          <div class="flex-column align-items-center mb-3">
+            <div class="flex align-items-center gap-3 mb-3">
+              <label for="host_name" class="font-semibold w-6rem flex">
+                Host Name <span style="color: red" class="ml-1">*</span>
+              </label>
+              <input
+                pInputText
+                id="host_name"
+                placeholder="Enter Host Name"
+                class="flex-auto"
+                autocomplete="off"
+                formControlName="host_name"
+              />
+            </div>
+            <div class="flex align-items-center gap-3 mb-3">
+              <label for="baud_rate" class="font-semibold w-6rem flex">
+                Baud Rate
+                <span style="color: red" class="ml-1">*</span>
+              </label>
+              <p-inputNumber
+                formControlName="baud_rate"
+                [min]="1"
+                placeholder="Enter Buad rate"
+                [useGrouping]="false"
+              ></p-inputNumber>
+            </div>
+            <div class="flex align-items-center gap-3 mb-3">
+              <label for="byte_size" class="font-semibold w-6rem flex">
+                Byte Size
+                <span style="color: red" class="ml-1">*</span>
+              </label>
+              <p-inputNumber
+                formControlName="byte_size"
+                [min]="1"
+                placeholder="Enter Byte Size"
+                [useGrouping]="false"
+              ></p-inputNumber>
+            </div>
+          </div>
+          <p-divider layout="vertical" />
+
+          <div class="flex-column align-items-center mb-3">
+            <div class="flex align-items-center gap-3 mb-3">
+              <label for="com_port" class="font-semibold w-6rem flex">
+                Com
+                <span style="color: red" class="ml-1">*</span>
+              </label>
+              <p-treeSelect
+                id="com_port"
+                [options]="comOptions"
+                containerStyleClass="w-full"
+                placeholder="Select Com Port"
+                formControlName="com_port"
+                scrollHeight="100px"
+              />
+            </div>
+            <div class="flex align-items-center gap-3 mb-3">
+              <label for="stop_bits" class="font-semibold w-6rem flex">
+                Stop Bits
+                <span style="color: red" class="ml-1">*</span>
+              </label>
+              <p-inputNumber
+                formControlName="stop_bits"
+                [min]="1"
+                placeholder="Enter Stop BIts"
+                [useGrouping]="false"
+              ></p-inputNumber>
+            </div>
+            <div class="flex align-items-center gap-3 mb-3">
+              <label for="parity" class="font-semibold w-6rem flex">
+                Parity
+                <span style="color: red" class="ml-1">*</span>
+              </label>
+              <p-treeSelect
+                class="md:w-15rem w-full"
+                id="parity"
+                [options]="parityProp"
+                containerStyleClass="w-full"
+                placeholder="Select Parity"
+                formControlName="parity"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div class="flex pt-4 justify-content-between">
+      <p-button
+        label="Cancel"
+        severity="danger"
+        icon="pi pi-times"
+        (onClick)="closeDialogue()"
+      />
+      <ng-container *ngIf="!editProp.edit; else editBtn">
+        <p-button
+          label="Next"
+          [disabled]="!HostForm.valid"
+          icon="pi pi-arrow-right"
+          iconPos="right"
+          (onClick)="formStepper('device')"
+        />
+      </ng-container>
+      <ng-template #editBtn>
+        <p-button
+          label="Edit"
+          [disabled]="!HostForm.valid"
+          icon="pi pi-pencil"
+          iconPos="right"
+          (onClick)="saveEditedForm()"
+        />
+      </ng-template>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="formModule == 'device'">
+    <form [formGroup]="DeviceForm">
+      <div class="flex">
+        <div class="p-2 mt-1">
+          <div class="flex align-items-center gap-3 mb-3">
+            <label for="device_name" class="font-semibold w-6rem flex">
+              Device Name
+              <span style="color: red" class="ml-1">*</span>
+            </label>
+            <input
+              pInputText
+              id="device_name"
+              class="flex-auto"
+              placeholder="Enter Device Name"
+              autocomplete="off"
+              formControlName="device_name"
+            />
+          </div>
+          <div class="flex align-items-center gap-3 mb-3">
+            <label for="mac" class="font-semibold w-6rem flex">
+              Device Id
+              <span style="color: red" class="ml-1">*</span>
+            </label>
+            <input
+              pInputText
+              id="mac"
+              class="flex-auto"
+              autocomplete="off"
+              formControlName="mac"
+            />
+          </div>
+          <div class="flex align-items-center gap-3 mb-3 mt-5">
+            <label for="frequency" class="font-semibold w-6rem flex">
+              Frequency<span style="color: red" class="ml-1">*</span>
+            </label>
+            <div>
+              <p-inputNumber
+                mode="decimal"
+                id="frequency"
+                class="flex-auto"
+                placeholder="Enter seconds"
+                inputId="withoutgrouping"
+                [useGrouping]="false"
+                [min]="40"
+                formControlName="frequency"
+              />
+              <p class="text-xs text-primary font-light mt-1 pl-1">
+                Minimum 40 seconds required
+              </p>
+            </div>
+          </div>
+        </div>
+        <p-divider layout="vertical" class="mr-2" />
+        <div class="mr-2">
+          <div class="flex align-items-center gap-3 mb-3">
+            <label for="device_manufacturer" class="font-semibold w-6rem flex">
+              Device Manufacturer
+            </label>
+            <textarea
+              id="device_manufacturer"
+              class="flex-auto"
+              rows="4"
+              cols="5"
+              placeholder="Enter Manufacture Name"
+              pInputTextarea
+              formControlName="manufacturer"
+            >
+            </textarea>
+          </div>
+          <div class="flex align-items-center gap-3 mb-3">
+            <label for="device_manufacturer" class="font-semibold w-6rem flex">
+              Description
+            </label>
+            <textarea
+              id="device_manufacturer"
+              class="flex-auto"
+              rows="4"
+              cols="30"
+              placeholder="Enter Description"
+              pInputTextarea
+              formControlName="description"
+            >
+            </textarea>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div class="flex pt-4 justify-content-between">
+      <p-button
+        label="Back"
+        icon="pi pi-arrow-left"
+        (onClick)="formStepper('host')"
+      />
+      <p-button
+        label="Cancel"
+        severity="danger"
+        icon="pi pi-times"
+        (onClick)="closeDialogue()"
+      />
+      <p-button
+        label="Next"
+        icon="pi pi-arrow-right"
+        [disabled]="!deviceValid"
+        iconPos="right"
+        (onClick)="formStepper('tags')"
+      />
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="formModule == 'tags'">
+    <form [formGroup]="DeviceForm">
+      <div class="p-2 mt-1 ml-8" formArrayName="tags">
+        <div
+          class="flex align-items-center justify-content-left gap-2 w-full"
+          *ngFor="let tagGroup of tagControl.controls; let i = index"
+          [formGroupName]="i"
+        >
+          <div class="flex align-items-center justify-content-center gap-2">
+            <div class="flex align-items-center gap-3 mb-3 mt-5">
+              <p-floatLabel>
+                <p-inputNumber
+                  mode="decimal"
+                  id="register"
+                  class="flex-auto"
+                  inputId="withoutgrouping"
+                  [useGrouping]="false"
+                  formControlName="id"
+                />
+                <label for="register">Register</label>
+              </p-floatLabel>
+            </div>
+            <div class="flex align-items-center gap-3 mb-3 mt-5">
+              <p-floatLabel>
+                <input
+                  pInputText
+                  id="tag_name"
+                  class="flex-auto"
+                  autocomplete="off"
+                  formControlName="tag"
+                />
+                <label for="tag_name">Tag Name</label>
+              </p-floatLabel>
+            </div>
+          </div>
+          <div class="mt-2 flex gap-1">
+            <p-button icon="pi pi-plus" [rounded]="true" (onClick)="addTag()" />
+            <p-button
+              *ngIf="tagGroup.get('dismissBtn')?.value"
+              icon="pi pi-times"
+              [rounded]="true"
+              severity="danger"
+              (onClick)="remmoveTag(i)"
+            />
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <div class="flex pt-4 justify-content-between">
+      <p-button
+        label="Back"
+        icon="pi pi-arrow-left"
+        (onClick)="formStepper('device')"
+      />
+      <p-button
+        label="Cancel"
+        severity="danger"
+        icon="pi pi-times"
+        (onClick)="closeDialogue()"
+      />
+      <p-button
+        label="Add"
+        icon="pi pi-plus"
+        [disabled]="!DeviceForm.valid"
+        (onClick)="addhostDevice()"
+        iconPos="right"
+      />
+    </div>
+  </ng-container>
+</p-dialog>

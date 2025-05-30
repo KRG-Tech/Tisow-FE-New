@@ -1,0 +1,56 @@
+<p-button
+  icon="pi pi-plus"
+  iconPos="left"
+  label="Dashboard"
+  severity="info"
+  (onClick)="dashboardDialogue()"
+/>
+
+<p-dialog
+  header="Header"
+  [(visible)]="visibility"
+  [modal]="true"
+  [style]="{ width: '35rem', height: '20rem' }"
+>
+  <ng-template pTemplate="header">
+    <div class="inline-flex align-items-center justify-content-center gap-2">
+      <i class="pi pi-chart-bar mr-2" style="font-size: 2rem"></i>
+      <span class="font-bold white-space-nowrap"> Add Dashboard </span>
+    </div>
+  </ng-template>
+  <form [formGroup]="dashboardForm">
+    <div class="flex align-items-center justify-content-center p-5">
+      <label for="name" class="font-semibold w-6rem flex">
+        Name <span style="color: red" class="ml-1">*</span>
+      </label>
+      <input
+        pInputText
+        id="name"
+        placeholder="Enter Dashboard Name"
+        class="flex-auto"
+        autocomplete="off"
+        formControlName="dashboard_name"
+      />
+    </div>
+
+    <div class="flex align-items-center justify-content-between p-5">
+      <p-button
+        label="Cancel"
+        severity="danger"
+        (onClick)="cancelAddDashboard()"
+      />
+      <p-button
+        label="Add"
+        severity="primary"
+        [disabled]="!dashboardForm.valid"
+        (onClick)="onDashboardAdd()"
+      />
+    </div>
+  </form>
+</p-dialog>
+
+<ng-template #loader>
+  <div class="w-full m-0 p-0 flex justify-content-center mt-3">
+    <p-progressSpinner ariaLabel="loading" />
+  </div>
+</ng-template>

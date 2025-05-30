@@ -1,0 +1,28 @@
+.neon-green {
+    background: radial-gradient(circle, var(--green-500) 25%, rgba(0, 0, 0, 1) 100%);
+}
+
+.i-neon-g {
+    text-shadow: 0 0 0.5rem #fff,
+        0 0 1rem #fff,
+        0 0 1.5rem #fff,
+        0 0 2.5rem var(--green-800),
+        0 0 4rem var(--green-800)
+}
+
+.icon {
+    color: white;
+
+}
+
+.neon-red {
+    background: radial-gradient(circle, var(--red-500) 25%, rgba(0, 0, 0, 1) 100%);
+}
+
+.i-neon-r {
+    text-shadow: 0 0 0.5rem #fff,
+        0 0 1rem #fff,
+        0 0 1.5rem #fff,
+        0 0 2.5rem var(--red-800),
+        0 0 4rem var(--red-800)
+}

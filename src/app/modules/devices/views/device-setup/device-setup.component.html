@@ -1,0 +1,85 @@
+<div
+  class="h-7rem w-7rem flex p-2 border-round-2xl transition-duration-300"
+  style="background-color: var(--surface-500); flex-direction: column"
+  [ngClass]="{
+    'cursor-pointer': device_type == 'host',
+    'hover:surface-400': device_type == 'host'
+  }"
+  (click)="device_type == 'host' && navigateToDevice()"
+>
+  <div
+    class="h-3rem w-6rem flex justify-content-center border-round flex-column align-items-center"
+    [ngClass]="data['status'] == 'active' ? 'neon-green' : 'neon-red'"
+    style="background-color: var(--surface-card)"
+  >
+    <i
+      class="pi pi-gauge icon"
+      style="font-size: 2rem"
+      [ngClass]="data['status'] == 'active' ? 'i-neon-g' : 'i-neon-r'"
+    ></i>
+  </div>
+  <div class="w-full flex align-items-center mt-1">
+    <div
+      style="color: var(--surface-card)"
+      class="border-round white-space-nowrap overflow-hidden text-overflow-ellipsis text-xs w-full ml-1"
+      [pTooltip]="tooltipConf"
+      tooltipPosition="bottom"
+      [autoHide]="false"
+    >
+      {{ deviceName }}
+    </div>
+    <i
+      pRipple
+      (click)="menu.toggle($event); $event.stopPropagation()"
+      class="pi pi-ellipsis-v p-1 border-circle-left"
+      style="font-size: 0.6rem; background-color: var(--surface-card)"
+    ></i>
+  </div>
+  <div
+    class="p-1 mt-1 font-bold flex align-items-center flex-column"
+    style="height: 200px; color: var(--surface-card)"
+    [pTooltip]="tooltipContent"
+    tooltipPosition="bottom"
+    [autoHide]="false"
+  >
+    <div
+      class="flex flex-column align-items-center justify-content-center gap-1 mt-0 pt-0"
+    >
+      <div
+        class="border-round border-1 px-2 pb-1 white-space-nowrap overflow-hidden text-overflow-ellipsis text-xs w-6rem font-sm font-light"
+        style="border-color: var(--gray-800); padding-top: 2px"
+      >
+        {{ device_name }}
+      </div>
+    </div>
+    <p class="font-bold text-xs m-0 p-0 mt-1">{{ this.data["type"] }}</p>
+
+    <ng-template #tooltipContent>
+      <div class="flex align-items-center">
+        <span class="text-sm">{{ device_name }}</span>
+      </div>
+    </ng-template>
+    <ng-template #tooltipConf>
+      <div class="flex align-items-center">
+        <span class="text-sm">{{ deviceName }}</span>
+      </div>
+    </ng-template>
+  </div>
+</div>
+<ng-template #loader>
+  <div class="w-full m-0 p-0 flex justify-content-center mt-3">
+    <p-progressSpinner ariaLabel="loading" />
+  </div>
+</ng-template>
+<p-menu #menu [model]="menuItem" [popup]="true" [style]="{ width: '8rem' }" />
+
+<ng-container *ngIf="showEditForm">
+  <app-form-control
+    class="ml-auto"
+    [formType]="device_type"
+    [selectedProtocol]="protocol"
+    [editProp]="editProp"
+    [visibility]="true"
+    (refresh)="closeEditWindow()"
+  ></app-form-control>
+</ng-container>

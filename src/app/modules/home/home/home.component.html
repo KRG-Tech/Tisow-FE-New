@@ -1,0 +1,10 @@
+<p-toast position="top-right"></p-toast>
+<ng-container *ngIf="authService.userLoggedIn; else loginTemplate">
+  <div class="w-full h-full flex gap-1 flex-auto">
+    <app-sidenav class="border-none"></app-sidenav>
+    <app-body class="w-full border-noround"></app-body>
+  </div>
+</ng-container>
+<ng-template #loginTemplate>
+  <app-login></app-login>
+</ng-template>

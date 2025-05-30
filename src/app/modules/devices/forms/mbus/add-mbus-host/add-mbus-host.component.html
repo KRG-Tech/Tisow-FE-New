@@ -1,0 +1,321 @@
+<p-dialog
+  header="Header"
+  [(visible)]="visibility"
+  closable="false"
+  [modal]="true"
+  [style]="{ width: '55rem' }"
+>
+  <ng-template pTemplate="header">
+    <div class="inline-flex align-items-center justify-content-center gap-2">
+      <i class="pi pi-wifi mr-2" style="font-size: 2rem"></i>
+      <span class="font-bold white-space-nowrap">
+        {{ editProp.edit ? "Edit" : "Add" }} MBus
+      </span>
+    </div>
+  </ng-template>
+
+  <ng-container *ngIf="formModule == 'host'">
+    <form [formGroup]="mbusHostForm">
+      <div class="flex flex-column h-12rem">
+        <div class="flex mt-3 justify-content-center">
+          <div class="flex align-items-center flex-column">
+            <div class="flex align-items-center gap-3 mb-3">
+              <label for="host_name" class="font-semibold w-6rem flex">
+                Host Name <span style="color: red" class="ml-1">*</span>
+              </label>
+              <input
+                pInputText
+                id="host_name"
+                placeholder="Enter Host Name"
+                class="flex-auto"
+                autocomplete="off"
+                formControlName="host_name"
+              />
+            </div>
+
+            <ng-container *ngIf="selectedConnection === 'serial'">
+              <div class="flex gap-5">
+                <div class="flex align-items-center gap-3 mb-3">
+                  <label for="com_port" class="font-semibold w-6rem flex">
+                    Com
+                    <span style="color: red" class="ml-1">*</span>
+                  </label>
+                  <p-treeSelect
+                    id="com_port"
+                    [options]="comOptions"
+                    containerStyleClass="w-full"
+                    placeholder="Select Com Port"
+                    formControlName="com_port"
+                    scrollHeight="100px"
+                  />
+                </div>
+                <div class="flex align-items-center gap-3 mb-3">
+                  <label for="address" class="font-semibold w-6rem flex">
+                    Address <span style="color: red" class="ml-1">*</span>
+                  </label>
+                  <p-inputNumber
+                    mode="decimal"
+                    id="address"
+                    class="flex-auto"
+                    placeholder="Enter Device Address"
+                    inputId="withoutgrouping"
+                    [useGrouping]="false"
+                    formControlName="address"
+                  />
+                </div>
+              </div>
+              <div class="flex align-items-center gap-3 mb-3">
+                <label for="baud_rate" class="font-semibold w-6rem flex">
+                  Baud rate <span style="color: red" class="ml-1">*</span>
+                </label>
+                <p-inputNumber
+                  mode="decimal"
+                  id="baud_rate"
+                  class="flex-auto"
+                  placeholder="Enter Baud Rate"
+                  inputId="withoutgrouping"
+                  [useGrouping]="false"
+                  formControlName="baud_rate"
+                />
+              </div>
+            </ng-container>
+          </div>
+          <ng-container *ngIf="selectedConnection === 'socket'">
+            <p-divider layout="vertical" class="mr-2" />
+            <div>
+              <div class="flex align-items-center gap-3 mb-3">
+                <label for="host_name" class="font-semibold w-6rem flex">
+                  Host <span style="color: red" class="ml-1">*</span>
+                </label>
+                <input
+                  pInputText
+                  id="host_name"
+                  placeholder="0.0.0.0"
+                  class="flex-auto"
+                  autocomplete="off"
+                  formControlName="host"
+                />
+              </div>
+              <div class="flex align-items-center gap-3 mb-3">
+                <label for="port" class="font-semibold w-6rem flex">
+                  Port <span style="color: red" class="ml-1">*</span>
+                </label>
+                <p-inputNumber
+                  mode="decimal"
+                  id="port"
+                  class="flex-auto"
+                  placeholder="1111"
+                  inputId="withoutgrouping"
+                  [useGrouping]="false"
+                  formControlName="port"
+                />
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </form>
+    <div class="flex pt-4 justify-content-between">
+      <p-button
+        label="Cancel"
+        severity="danger"
+        icon="pi pi-times"
+        (onClick)="closeDialogue()"
+      />
+      <ng-container *ngIf="!editProp.edit; else editBtn">
+        <p-button
+          label="Next"
+          [disabled]="!mbusHostForm.valid"
+          icon="pi pi-arrow-right"
+          iconPos="right"
+          (onClick)="fetchDevices() && nextStepper('device')"
+        />
+      </ng-container>
+      <ng-template #editBtn>
+        <p-button
+          label="Edit"
+          [disabled]="!mbusHostForm.valid"
+          icon="pi pi-pencil"
+          iconPos="right"
+          (onClick)="saveEditedForm()"
+        />
+      </ng-template>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="formModule == 'device'">
+    <form [formGroup]="deviceForm">
+      <ng-container *ngIf="showInfo; else loader">
+        <div class="p-2 mt-1 flex flex-column-full">
+          <div class="flex align-items-center gap-3 mb-3">
+            <label for="mac" class="font-semibold w-6rem flex">
+              Mac
+              <span style="color: red" class="ml-1">*</span>
+            </label>
+            <input
+              pInputText
+              id="mac"
+              class="flex-auto"
+              autocomplete="off"
+              formControlName="mac"
+            />
+          </div>
+          <p-divider layout="vertical" class="mr-2" />
+          <div class="mr-2">
+            <div class="flex align-items-center gap-3 mb-3">
+              <label for="device_name" class="font-semibold w-6rem flex">
+                Device Name
+                <span style="color: red" class="ml-1">*</span>
+              </label>
+              <input
+                pInputText
+                id="device_name"
+                placeholder="Enter Device Name"
+                class="flex-auto"
+                autocomplete="off"
+                formControlName="device_name"
+              />
+            </div>
+            <div class="flex align-items-center gap-3 mb-3">
+              <label
+                for="device_manufacturer"
+                class="font-semibold w-6rem flex"
+              >
+                Device Manufacturer
+              </label>
+              <textarea
+                id="device_manufacturer"
+                class="flex-auto"
+                rows="4"
+                placeholder="Enter Manufacture Name"
+                cols="5"
+                pInputTextarea
+                formControlName="device_manufacturer"
+              >
+              </textarea>
+            </div>
+            <div class="flex align-items-center gap-3 mb-3">
+              <label
+                for="device_manufacturer"
+                class="font-semibold w-6rem flex"
+              >
+                Description
+              </label>
+              <textarea
+                id="device_manufacturer"
+                class="flex-auto"
+                rows="4"
+                cols="30"
+                placeholder="Enter Description"
+                pInputTextarea
+                formControlName="device_description"
+              >
+              </textarea>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+      <ng-template #loader>
+        <div
+          class="p-2 mt-1 flex w-full justify-content-center align-items-center"
+        >
+          <p-progressSpinner ariaLabel="loading" />
+        </div>
+      </ng-template>
+    </form>
+    <div class="flex pt-4 justify-content-between">
+      <p-button
+        label="Back"
+        icon="pi pi-arrow-left"
+        (onClick)="prevStepper('host')"
+      />
+      <p-button
+        label="Cancel"
+        severity="danger"
+        icon="pi pi-times"
+        (onClick)="closeDialogue()"
+      />
+      <p-button
+        label="Next"
+        icon="pi pi-arrow-right"
+        [disabled]="!is_mac_valid"
+        iconPos="right"
+        (onClick)="nextStepper('tags')"
+      />
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="formModule == 'tags'">
+    <form [formGroup]="deviceForm">
+      <div class="p-2 mt-1 flex w-full">
+        <div>
+          <div class="flex align-items-center gap-3 mb-3 mt-5">
+            <label for="tags" class="font-semibold w-6rem flex">
+              Tags<span style="color: red" class="ml-1">*</span>
+            </label>
+            <p-multiSelect
+              [maxSelectedLabels]="1"
+              selectedItemsLabel="{} tags selected"
+              [options]="objectList"
+              formControlName="tagList"
+              optionLabel="label"
+              optionValue="data"
+              dataKey="key"
+              tooltipPosition="top"
+              placeholder="Select Tags"
+              scrollHeight="130px"
+            />
+          </div>
+          <div class="flex align-items-center gap-3 mb-3 mt-5">
+            <label for="frequency" class="font-semibold w-6rem flex">
+              Frequency<span style="color: red" class="ml-1">*</span>
+            </label>
+            <div>
+              <p-inputNumber
+                mode="decimal"
+                id="frequency"
+                class="flex-auto"
+                placeholder="Enter in seconds"
+                inputId="withoutgrouping"
+                [useGrouping]="false"
+                [min]="40"
+                formControlName="frequency"
+              />
+              <p class="text-xs text-primary font-light mt-1 pl-1">
+                Minimum 40 seconds required
+              </p>
+            </div>
+          </div>
+        </div>
+        <p-divider layout="vertical" class="mr-2" />
+        <div class="flex align-items-center gap-3 mb-3">
+          <p-fieldset legend="Selected tags">
+            <p-scrollPanel [style]="{ width: '100%', height: '100px' }">
+              <p *ngFor="let item of selectedTags">{{ item }}</p>
+            </p-scrollPanel>
+          </p-fieldset>
+        </div>
+      </div>
+    </form>
+    <div class="flex pt-4 justify-content-between">
+      <p-button
+        label="Back"
+        icon="pi pi-arrow-left"
+        (onClick)="prevStepper('device')"
+      />
+      <p-button
+        label="Cancel"
+        severity="danger"
+        icon="pi pi-times"
+        (onClick)="closeDialogue()"
+      />
+      <p-button
+        label="Add"
+        icon="pi pi-plus"
+        [disabled]="!deviceForm.valid"
+        iconPos="right"
+        (onClick)="addDevice()"
+      />
+    </div>
+  </ng-container>
+</p-dialog>
