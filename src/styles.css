@@ -1,1 +1,105 @@
+@import "ag-grid-community/styles/ag-grid.css";
+@import "ag-grid-community/styles/ag-theme-quartz.css";
+@import "ag-grid-community/styles/ag-theme-balham.css";
+@import "ag-grid-community/styles/ag-theme-material.css";
+@import "ag-grid-community/styles/ag-theme-alpine.css";
 
+html,
+body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--surface-400);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:horizontal {
+  background: var(--surface-400);
+  border-radius: 5px;
+}
+
+.ag-theme-alpine-dark {
+  --ag-background-color: transparent;
+  --ag-header-foreground-color: var(--surface-500);
+  --ag-foreground-color: var(--surface-600);
+  --ag-odd-row-background-color: var(--surface-200);
+  --ag-border-color: var(--surface-ground);
+  --ag-row-border-width: 1px;
+  --ag-row-border-color: var(--surface-ground);
+  --ag-header-background-color: var(--surface-50);
+  --ag-cell-horizontal-border: var(--ag-row-border-width)
+    var(--ag-row-border-style);
+}
+
+.ag-tooltip {
+  background-color: var(--surface-500) !important;
+  outline: none !important;
+  border: none !important;
+  color: var(--surface-50) !important;
+}
+
+.ag-sticky-bottom {
+  border-top: none;
+}
+
+.ag-theme-alpine-dark .ag-ltr .ag-cell {
+  border-right: 1px solid var(--surface-ground);
+  outline: none;
+}
+
+.ag-theme-alpine input[class^="ag-"]:not([type]),
+.ag-theme-alpine input[class^="ag-"][type="text"],
+.ag-theme-alpine input[class^="ag-"][type="number"],
+.ag-theme-alpine input[class^="ag-"][type="tel"],
+.ag-theme-alpine input[class^="ag-"][type="date"],
+.ag-theme-alpine input[class^="ag-"][type="datetime-local"],
+.ag-theme-alpine textarea[class^="ag-"],
+.ag-theme-alpine-dark input[class^="ag-"]:not([type]),
+.ag-theme-alpine-dark input[class^="ag-"][type="text"],
+.ag-theme-alpine-dark input[class^="ag-"][type="number"],
+.ag-theme-alpine-dark input[class^="ag-"][type="tel"],
+.ag-theme-alpine-dark input[class^="ag-"][type="date"],
+.ag-theme-alpine-dark input[class^="ag-"][type="datetime-local"],
+.ag-theme-alpine-dark textarea[class^="ag-"],
+.ag-theme-alpine-auto-dark input[class^="ag-"]:not([type]),
+.ag-theme-alpine-auto-dark input[class^="ag-"][type="text"],
+.ag-theme-alpine-auto-dark input[class^="ag-"][type="number"],
+.ag-theme-alpine-auto-dark input[class^="ag-"][type="tel"],
+.ag-theme-alpine-auto-dark input[class^="ag-"][type="date"],
+.ag-theme-alpine-auto-dark input[class^="ag-"][type="datetime-local"],
+.ag-theme-alpine-auto-dark textarea[class^="ag-"] {
+  background-color: var(--surface-200);
+}
+
+.ag-overlay-loading-center {
+  background: var(--surface-500);
+  color: var(--surface-50);
+  border: none;
+}
+
+.ag-ltr .ag-cell-focus:not(.ag-cell-range-selected):focus-within,
+.ag-ltr .ag-context-menu-open .ag-cell-focus:not(.ag-cell-range-selected),
+.ag-ltr .ag-full-width-row.ag-row-focus:focus .ag-cell-wrapper.ag-row-group,
+.ag-ltr .ag-cell-range-single-cell,
+.ag-ltr .ag-cell-range-single-cell.ag-cell-range-handle,
+.ag-rtl .ag-cell-focus:not(.ag-cell-range-selected):focus-within,
+.ag-rtl .ag-context-menu-open .ag-cell-focus:not(.ag-cell-range-selected),
+.ag-rtl .ag-full-width-row.ag-row-focus:focus .ag-cell-wrapper.ag-row-group,
+.ag-rtl .ag-cell-range-single-cell,
+.ag-rtl .ag-cell-range-single-cell.ag-cell-range-handle {
+  border: none;
+  border-right: 1px solid var(--surface-ground);
+  outline: none;
+}
